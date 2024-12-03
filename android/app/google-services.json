@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "2177622073",
+    "project_id": "tugas-uas-92a0d",
+    "storage_bucket": "tugas-uas-92a0d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2177622073:android:082f4f1dee0a5fb2652de8",
+        "android_client_info": {
+          "package_name": "com.example.heavy_rental_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpIZ1TT1p-tUJMvI90b9lyWMhA5DGqfkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

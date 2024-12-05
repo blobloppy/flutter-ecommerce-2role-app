@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:heavy_rental_app/pages/detail_page.dart';
@@ -35,6 +36,11 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  @override
+  void logout() {
+    FirebaseAuth.instance.signOut();
+  }
+
   // Fetch vehicles based on the selected category and search query
   Future<List<Map<String, dynamic>>> fetchVehicles() async {
     try {
@@ -65,13 +71,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Vehicle Rental',
+          'T  R  E  K',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            onPressed: logout,
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -188,8 +200,13 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey[300],
                             ),
-                            child: Icon(Icons.image,
-                                size: 40, color: Colors.grey[700]),
+                            child: Image.network(
+                              vehicle['imageUrl'] ??
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvdb23DUEZrpG9mwjb8iDYOA1BzzANfUD3aQ&s',
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                           SizedBox(width: 16),
                           // Vehicle Info

@@ -30,7 +30,7 @@ class VehicleDetailPage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: NetworkImage(vehicle['image_url'] ?? 'https://via.placeholder.com/150'),
+                  image: NetworkImage(vehicle['imageUrl']),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -59,10 +59,13 @@ class VehicleDetailPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Total Harga", style: TextStyle(fontSize: 16)),
+                Text("Price", style: TextStyle(fontSize: 16)),
                 Text(
                   'Rp.${vehicle['price'] ?? '0'}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange),
                 ),
               ],
             ),
@@ -70,10 +73,13 @@ class VehicleDetailPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Delivery Fee", style: TextStyle(fontSize: 16)),
+                Text("Weight (kg)", style: TextStyle(fontSize: 16)),
                 Text(
-                  'Rp. 8.000',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
+                  '${vehicle['weight'] ?? '0'}',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange),
                 ),
               ],
             ),
@@ -81,10 +87,13 @@ class VehicleDetailPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Packaging Fee", style: TextStyle(fontSize: 16)),
+                Text("Height (m)", style: TextStyle(fontSize: 16)),
                 Text(
-                  'Rp. 3.000',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
+                  '${vehicle['height'] ?? '0'}',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange),
                 ),
               ],
             ),
@@ -92,25 +101,49 @@ class VehicleDetailPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Utensil", style: TextStyle(fontSize: 16)),
+                Text("Width", style: TextStyle(fontSize: 16)),
                 Text(
-                  'Free',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
+                  '${vehicle['width'] ?? '0'}',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange),
                 ),
               ],
             ),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Diskon Promo", style: TextStyle(fontSize: 16)),
-                Text(
-                  '-Rp. 12.000',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
-                ),
-              ],
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16),
+        color: Colors.white,
+        child: ElevatedButton(
+          onPressed: () {
+            // Add your rental logic here
+            print('Rental button pressed for ${vehicle['name']}');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Rental Appointment Has Been Ordered"),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange, // Button color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: Text(
+            'Rent Now',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
       backgroundColor: Colors.white,

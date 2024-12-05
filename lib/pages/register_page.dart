@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               //app name
               const Text(
-                "M I N I M A L",
+                "T  R  E  K",
                 style: TextStyle(fontSize: 20),
               ),
 

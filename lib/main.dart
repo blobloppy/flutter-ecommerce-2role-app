@@ -4,6 +4,7 @@ import 'package:heavy_rental_app/auth/auth.dart';
 import 'package:heavy_rental_app/auth/login_or_register.dart';
 import 'package:heavy_rental_app/firebase_options.dart';
 import 'package:heavy_rental_app/pages/add_products.dart';
+import 'package:heavy_rental_app/pages/edit_products.dart';
 import 'package:heavy_rental_app/pages/register_page.dart';
 
 import 'pages/login_page.dart';

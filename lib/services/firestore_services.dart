@@ -7,7 +7,13 @@ class FirestoreService {
 
   // Add Item
   Future<void> addItem(InventoryItem item) async {
-    await _inventoryCollection.add(item.toMap());
+    await FirebaseFirestore.instance.collection('inventory').add({
+      'id': item.id,
+      'name': item.name,
+      'quantity': item.quantity,
+      'price': item.price,
+      'imageUrl': item.imageUrl,
+    });
   }
 
   // Fetch All Items

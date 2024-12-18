@@ -11,25 +11,24 @@ class AddItemScreen extends StatefulWidget {
 
 class _AddItemScreenState extends State<AddItemScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _firestoreService = FirestoreService();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController imageUrlController = TextEditingController();
 
-  String _name = "";
-  String _id = "";
-  String _imageUrl = "";
-  int _quantity = 0;
-  double _price = 0.0;
+  final FirestoreService firestoreService = FirestoreService();
 
-  void _saveItem() {
+  Future<void> _addItem() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
       final newItem = InventoryItem(
-          id: _id,
-          name: _name,
-          quantity: _quantity,
-          price: _price,
-          imageUrl: _imageUrl);
-      _firestoreService.addItem(newItem);
+        id: "", // Firestore generates this automatically
+        name: nameController.text,
+        quantity: int.parse(quantityController.text),
+        price: double.parse(priceController.text),
+        imageUrl: imageUrlController.text,
+      );
+
+      await firestoreService.addItem(newItem);
       Navigator.pop(context);
     }
   }
@@ -42,38 +41,38 @@ class _AddItemScreenState extends State<AddItemScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: "Item ID"),
-                onSaved: (value) => _id = value!,
-                validator: (value) => value!.isEmpty ? "Enter item id" : null,
-              ),
-              TextFormField(
+                controller: nameController,
                 decoration: const InputDecoration(labelText: "Item Name"),
-                onSaved: (value) => _name = value!,
-                validator: (value) => value!.isEmpty ? "Enter item name" : null,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: "Item Image URL"),
-                onSaved: (value) => _imageUrl = value!,
                 validator: (value) =>
-                    value!.isEmpty ? "Enter item image URL" : null,
+                    value!.isEmpty ? "Please enter an item name" : null,
               ),
               TextFormField(
+                controller: quantityController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: "Quantity"),
-                keyboardType: TextInputType.number,
-                onSaved: (value) => _quantity = int.parse(value!),
+                validator: (value) =>
+                    value!.isEmpty ? "Please enter a quantity" : null,
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: "Price"),
+                controller: priceController,
                 keyboardType: TextInputType.number,
-                onSaved: (value) => _price = double.parse(value!),
+                decoration: const InputDecoration(labelText: "Price"),
+                validator: (value) =>
+                    value!.isEmpty ? "Please enter a price" : null,
               ),
-              const SizedBox(height: 20),
+              TextFormField(
+                controller: imageUrlController,
+                decoration: const InputDecoration(labelText: "Image URL"),
+                validator: (value) =>
+                    value!.isEmpty ? "Please enter an image URL" : null,
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _saveItem,
-                child: const Text("Save Item"),
+                onPressed: _addItem,
+                child: const Text("Add Item"),
               ),
             ],
           ),

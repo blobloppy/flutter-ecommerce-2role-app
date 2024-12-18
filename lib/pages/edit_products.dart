@@ -13,48 +13,33 @@ class EditItemScreen extends StatefulWidget {
 
 class _EditItemScreenState extends State<EditItemScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _firestoreService = FirestoreService();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController imageUrlController = TextEditingController();
 
-  late TextEditingController _nameController;
-  late TextEditingController _quantityController;
-  late TextEditingController _priceController;
-  late TextEditingController _imageUrlController;
+  final FirestoreService firestoreService = FirestoreService();
 
   @override
   void initState() {
     super.initState();
-    // Pre-fill the controllers with existing item data
-    _nameController = TextEditingController(text: widget.item.name);
-    _imageUrlController = TextEditingController(text: widget.item.imageUrl);
-    _quantityController =
-        TextEditingController(text: widget.item.quantity.toString());
-    _priceController =
-        TextEditingController(text: widget.item.price.toString());
+    nameController.text = widget.item.name;
+    quantityController.text = widget.item.quantity.toString();
+    priceController.text = widget.item.price.toString();
+    imageUrlController.text = widget.item.imageUrl;
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _quantityController.dispose();
-    _priceController.dispose();
-    _imageUrlController.dispose();
-    super.dispose();
-  }
-
-  void _updateItem() {
+  Future<void> _updateItem() async {
     if (_formKey.currentState!.validate()) {
       final updatedItem = InventoryItem(
         id: widget.item.id,
-        name: _nameController.text,
-        quantity: int.parse(_quantityController.text),
-        price: double.parse(_priceController.text),
-        imageUrl: _imageUrlController.text,
+        name: nameController.text,
+        quantity: int.parse(quantityController.text),
+        price: double.parse(priceController.text),
+        imageUrl: imageUrlController.text,
       );
 
-      // Update the item in Firestore
-      _firestoreService.updateItem(updatedItem);
-
-      // Navigate back to the Home Screen
+      await firestoreService.updateItem(updatedItem);
       Navigator.pop(context);
     }
   }
@@ -67,30 +52,43 @@ class _EditItemScreenState extends State<EditItemScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               TextFormField(
-                controller: _nameController,
+                controller: nameController,
                 decoration: const InputDecoration(labelText: "Item Name"),
                 validator: (value) =>
-                    value!.isEmpty ? "Please enter item name" : null,
+                    value!.isEmpty ? "Please enter an item name" : null,
               ),
               TextFormField(
-                controller: _quantityController,
+                controller: quantityController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: "Quantity"),
-                keyboardType: TextInputType.number,
                 validator: (value) =>
-                    value!.isEmpty ? "Please enter quantity" : null,
+                    value!.isEmpty ? "Please enter a quantity" : null,
               ),
               TextFormField(
-                controller: _priceController,
-                decoration: const InputDecoration(labelText: "Price"),
+                controller: priceController,
                 keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Price"),
                 validator: (value) =>
-                    value!.isEmpty ? "Please enter price" : null,
+                    value!.isEmpty ? "Please enter a price" : null,
               ),
-              const SizedBox(height: 20),
+              TextFormField(
+                controller: imageUrlController,
+                decoration: const InputDecoration(labelText: "Image URL"),
+                validator: (value) =>
+                    value!.isEmpty ? "Please enter an image URL" : null,
+              ),
+              const SizedBox(height: 16),
+              imageUrlController.text.isNotEmpty
+                  ? Image.network(
+                      imageUrlController.text,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : const Text("No image available"),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _updateItem,
                 child: const Text("Update Item"),

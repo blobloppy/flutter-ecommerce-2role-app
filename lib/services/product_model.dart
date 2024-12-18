@@ -14,7 +14,13 @@ class InventoryItem {
 
   // Convert item to Firestore map
   Map<String, dynamic> toMap() {
-    return {'name': name, 'quantity': quantity, 'price': price};
+    return {
+      'name': name,
+      'quantity': quantity,
+      'price': price,
+      'id': id,
+      'imageUrl': imageUrl
+    };
   }
 
   // Factory to create an item from Firestore map

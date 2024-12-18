@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heavy_rental_app/pages/edit_products.dart';
 import 'package:heavy_rental_app/services/firestore_services.dart';
 import 'package:heavy_rental_app/services/product_model.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +33,25 @@ class HomeScreen extends StatelessWidget {
                 title: Text(item.name),
                 subtitle:
                     Text("Qty: ${item.quantity} | Price: \$${item.price}"),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => firestoreService.deleteItem(item.id),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditItemScreen(item: item),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => firestoreService.deleteItem(item.id),
+                    ),
+                  ],
                 ),
               );
             },

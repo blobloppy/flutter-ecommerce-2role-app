@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heavy_rental_app/pages/activity_log.dart';
 import 'package:heavy_rental_app/pages/edit_products.dart';
 import 'package:heavy_rental_app/services/firestore_services.dart';
 import 'package:heavy_rental_app/services/product_model.dart';
@@ -168,6 +169,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text("Price (High to Low)")),
             ],
           ),
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              // Navigate to the Activity Log screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ActivityLogScreen(),
+                ),
+              );
+            },
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50.0),
@@ -223,7 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => firestoreService.deleteItem(item.id),
+                        onPressed: () =>
+                            firestoreService.deleteItem(item.id, item.name),
                       ),
                     ],
                   ),

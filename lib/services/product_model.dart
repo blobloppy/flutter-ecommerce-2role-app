@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class InventoryItem {
   final String id;
   final String name;
@@ -31,6 +33,26 @@ class InventoryItem {
       imageUrl: map['imageUrl'],
       quantity: map['quantity'],
       price: map['price'],
+    );
+  }
+}
+
+class ActivityLog {
+  final String action;
+  final String details;
+  final DateTime timestamp;
+
+  ActivityLog({
+    required this.action,
+    required this.details,
+    required this.timestamp,
+  });
+
+  factory ActivityLog.fromMap(Map<String, dynamic> map) {
+    return ActivityLog(
+      action: map['action'],
+      details: map['details'],
+      timestamp: (map['timestamp'] as Timestamp).toDate(),
     );
   }
 }

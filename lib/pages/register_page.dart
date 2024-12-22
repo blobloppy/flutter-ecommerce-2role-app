@@ -60,7 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25),
@@ -69,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               //login
               Icon(
-                Icons.person,
+                Icons.inventory,
                 size: 80,
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
@@ -80,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               //app name
               const Text(
-                "T  R  E  K",
+                "I N V E N T O R Y",
                 style: TextStyle(fontSize: 20),
               ),
 

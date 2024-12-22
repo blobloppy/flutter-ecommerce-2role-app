@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Filter Items"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -84,6 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: (value) {
                   minQuantity = int.tryParse(value);
                 },
+              ),
+              SizedBox(
+                height: 20,
               ),
               TextField(
                 decoration: const InputDecoration(labelText: "Max Quantity"),
@@ -121,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: _showFilterDialog,
           ),
           PopupMenuButton<String>(
+            color: Colors.white,
             onSelected: (value) {
               setState(() {
                 sortOption = value;

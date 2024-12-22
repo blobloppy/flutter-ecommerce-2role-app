@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               // Login Icon
               Icon(
-                Icons.person,
+                Icons.inventory,
                 size: 80,
                 color:
                     Theme.of(context).colorScheme.primary, // Use primary color
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // App Name (Text style can be adjusted based on your preference)
               Text(
-                "T  R  E  K",
+                "I N V E N T O R Y",
                 style: TextStyle(
                   fontSize: 24.0,
                   color: Theme.of(context)

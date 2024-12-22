@@ -7,8 +7,6 @@ import 'package:heavy_rental_app/pages/add_products.dart';
 import 'package:heavy_rental_app/pages/edit_products.dart';
 import 'package:heavy_rental_app/pages/register_page.dart';
 
-import 'pages/login_page.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -23,46 +21,48 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark, // Use a dark theme
-        primaryColor: Colors.teal, // Minimalist accent color
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
-          titleTextStyle: TextStyle(
+        brightness:
+            Brightness.light, // Use a light theme for better readability
+        primaryColor:
+            Colors.blueGrey[900], // A dark blue-grey for a professional look
+        scaffoldBackgroundColor: Colors.grey[100], // Light grey background
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blueGrey[900], // Dark blue-grey app bar
+          titleTextStyle: const TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
-          iconTheme: IconThemeData(color: Colors.teal),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.blueGrey,
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white, fontSize: 16),
-          titleMedium: TextStyle(color: Colors.white, fontSize: 18),
+          bodyMedium: TextStyle(color: Colors.black, fontSize: 16),
+          titleMedium: TextStyle(color: Colors.black, fontSize: 18),
           titleLarge: TextStyle(
-            color: Colors.teal,
+            color: Colors.blueGrey, // Title color matches primary
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
-          fillColor: Colors.grey,
+          fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal),
+            borderSide: BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2),
+            borderSide: BorderSide(color: Colors.blueGrey),
           ),
-          labelStyle: TextStyle(color: Colors.white70),
-          hintStyle: TextStyle(color: Colors.white54),
+          labelStyle: TextStyle(color: Colors.grey),
+          hintStyle: TextStyle(color: Colors.grey),
         ),
-        cardColor: Colors.grey[900], // Background color for cards
+        cardColor: Colors.white,
       ),
-      darkTheme: ThemeData.dark(), // Optional: Default Flutter dark theme
       home: const AuthPage(),
       routes: {
         '/addItem': (context) => const AddItemScreen(),

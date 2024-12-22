@@ -17,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String searchQuery = "";
   int? minQuantity;
   int? maxQuantity;
-
   String sortOption = "Name (A-Z)";
 
   List<InventoryItem> allItems = [];
@@ -51,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return matchesSearch && matchesQuantity;
       }).toList();
-      _sortItems(); // Ensure filtered items are sorted
+      _sortItems();
     });
   }
 
@@ -65,10 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
         filteredItems.sort((a, b) => a.quantity.compareTo(b.quantity));
       } else if (sortOption == "Quantity (High to Low)") {
         filteredItems.sort((a, b) => b.quantity.compareTo(a.quantity));
-      } else if (sortOption == "Price (Low to High)") {
-        filteredItems.sort((a, b) => a.price.compareTo(b.price));
-      } else if (sortOption == "Price (High to Low)") {
-        filteredItems.sort((a, b) => b.price.compareTo(a.price));
       }
     });
   }
@@ -128,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onSelected: (value) {
               setState(() {
                 sortOption = value;
-                _sortItems(); // Re-sort items on selection
+                _sortItems();
               });
             },
             itemBuilder: (context) => [
@@ -142,18 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const PopupMenuItem(
                   value: "Quantity (High to Low)",
                   child: Text("Quantity (High to Low)")),
-              const PopupMenuItem(
-                  value: "Price (Low to High)",
-                  child: Text("Price (Low to High)")),
-              const PopupMenuItem(
-                  value: "Price (High to Low)",
-                  child: Text("Price (High to Low)")),
             ],
           ),
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () {
-              // Navigate to the Activity Log screen
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -184,40 +172,95 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: filteredItems.isEmpty
-          ? const Center(child: Text("No items match the criteria."))
-          : ListView.builder(
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.search_off,
+                    size: 50.0,
+                  ),
+                  const SizedBox(height: 16.0),
+                  const Text(
+                    "No products found. Add your first product!",
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                ],
+              ),
+            )
+          : GridView.builder(
+              padding: const EdgeInsets.all(16.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1, // Change to 1 item per row for bigger cards
+                crossAxisSpacing: 16.0, // Increase spacing between items
+                mainAxisSpacing: 16.0, // Increase vertical spacing
+              ),
               itemCount: filteredItems.length,
               itemBuilder: (context, index) {
                 final item = filteredItems[index];
-                return ListTile(
-                  leading: item.imageUrl.isNotEmpty
-                      ? Image.network(
-                          item.imageUrl,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.image, size: 50),
-                  title: Text(item.name),
-                  subtitle: Text("Qty: ${item.quantity}"),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  elevation: 4.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditItemScreen(item: item),
-                            ),
-                          );
-                        },
+                      item.imageUrl.isNotEmpty
+                          ? Container(
+                              color: Colors.grey[200], // Subtle color accent
+                              child: Image.network(
+                                item.imageUrl,
+                                height: 230.0, // Increased image height
+                                width: 230.0, // Increased image width
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(Icons.image,
+                              size: 100), // Larger default icon
+                      const SizedBox(height: 12),
+                      Text(
+                        item.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18, // Slightly larger font size
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () =>
-                            firestoreService.deleteItem(item.id, item.name),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Qty: ${item.quantity}",
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.teal, // Contrasting color
+                        ),
+                      ),
+                      // ... Action buttons row
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // Center buttons
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditItemScreen(item: item),
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => firestoreService.deleteItem(
+                                  item.id, item.name),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

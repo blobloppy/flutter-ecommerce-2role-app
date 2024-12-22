@@ -17,10 +17,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
 
-  //login method
+  // Login method
   void login() async {
     showDialog(
       context: context,
@@ -45,102 +44,100 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //login
+              // Login Icon
               Icon(
                 Icons.person,
                 size: 80,
-                color: Theme.of(context).colorScheme.inversePrimary,
+                color:
+                    Theme.of(context).colorScheme.primary, // Use primary color
               ),
 
-              const SizedBox(
-                height: 25,
+              const SizedBox(height: 25),
+
+              // App Name (Text style can be adjusted based on your preference)
+              Text(
+                "T  R  E  K",
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary, // Use primary color
+                ),
               ),
 
-              //app name
-              const Text(
-                "T  R  E  K",
-                style: TextStyle(fontSize: 20),
-              ),
+              const SizedBox(height: 50),
 
-              const SizedBox(
-                height: 50,
-              ),
-
-              //email textfield
+              // Email Textfield
               MyTextfield(
                 hintText: "Email",
                 obscureText: false,
                 controller: emailController,
               ),
 
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
 
-              //password textfield
+              // Password Textfield
               MyTextfield(
                 hintText: "Password",
                 obscureText: true,
                 controller: passwordController,
               ),
 
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
 
-              //forgot password
+              // Forgot Password
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     "Forgot Password?",
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),
 
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
 
-              //sign in button
+              // Sign In Button
               MyButton(
                 text: "Login",
                 onTap: login,
               ),
 
-              const SizedBox(
-                height: 25,
-              ),
+              const SizedBox(height: 25),
 
-              //dont have an account? Register
+              // Don't have an account? Register
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Don't have an account? ",
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
                   GestureDetector(
                     onTap: widget.onTap,
-                    child: const Text(
+                    child: Text(
                       "Register Here",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary, // Use primary color
                       ),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

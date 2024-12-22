@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heavy_rental_app/pages/activity_log.dart';
 import 'package:heavy_rental_app/pages/edit_products.dart';
@@ -150,6 +151,14 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut(); // Sign out the user
+              // Optionally, navigate to a login screen or perform other actions
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          )
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50.0),
@@ -199,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final item = filteredItems[index];
                 return Card(
+                  color: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),

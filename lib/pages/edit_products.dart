@@ -60,12 +60,18 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 validator: (value) =>
                     value!.isEmpty ? "Please enter an item name" : null,
               ),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 controller: quantityController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: "Quantity"),
                 validator: (value) =>
                     value!.isEmpty ? "Please enter a quantity" : null,
+              ),
+              SizedBox(
+                height: 20,
               ),
               TextFormField(
                 controller: priceController,
@@ -74,17 +80,23 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 validator: (value) =>
                     value!.isEmpty ? "Please enter a price" : null,
               ),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 controller: imageUrlController,
                 decoration: const InputDecoration(labelText: "Image URL"),
                 validator: (value) =>
                     value!.isEmpty ? "Please enter an image URL" : null,
               ),
+              SizedBox(
+                height: 20,
+              ),
               const SizedBox(height: 16),
               imageUrlController.text.isNotEmpty
                   ? Image.network(
                       imageUrlController.text,
-                      height: 200,
+                      height: 500,
                       fit: BoxFit.cover,
                     )
                   : const Text("No image available"),

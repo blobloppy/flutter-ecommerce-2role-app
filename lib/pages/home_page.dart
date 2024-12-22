@@ -17,8 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String searchQuery = "";
   int? minQuantity;
   int? maxQuantity;
-  double? minPrice;
-  double? maxPrice;
 
   String sortOption = "Name (A-Z)";
 
@@ -51,10 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             (minQuantity == null || item.quantity >= minQuantity!) &&
                 (maxQuantity == null || item.quantity <= maxQuantity!);
 
-        final matchesPrice = (minPrice == null || item.price >= minPrice!) &&
-            (maxPrice == null || item.price <= maxPrice!);
-
-        return matchesSearch && matchesQuantity && matchesPrice;
+        return matchesSearch && matchesQuantity;
       }).toList();
       _sortItems(); // Ensure filtered items are sorted
     });
@@ -99,20 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   maxQuantity = int.tryParse(value);
-                },
-              ),
-              TextField(
-                decoration: const InputDecoration(labelText: "Min Price"),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  minPrice = double.tryParse(value);
-                },
-              ),
-              TextField(
-                decoration: const InputDecoration(labelText: "Max Price"),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  maxPrice = double.tryParse(value);
                 },
               ),
             ],
@@ -218,8 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       : const Icon(Icons.image, size: 50),
                   title: Text(item.name),
-                  subtitle:
-                      Text("Qty: ${item.quantity} | Price: \$${item.price}"),
+                  subtitle: Text("Qty: ${item.quantity}"),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

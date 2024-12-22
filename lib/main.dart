@@ -20,10 +20,50 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      theme: ThemeData(
+        brightness: Brightness.dark, // Use a dark theme
+        primaryColor: Colors.teal, // Minimalist accent color
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          iconTheme: IconThemeData(color: Colors.teal),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white,
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white, fontSize: 16),
+          titleMedium: TextStyle(color: Colors.white, fontSize: 18),
+          titleLarge: TextStyle(
+            color: Colors.teal,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.grey,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          labelStyle: TextStyle(color: Colors.white70),
+          hintStyle: TextStyle(color: Colors.white54),
+        ),
+        cardColor: Colors.grey[900], // Background color for cards
+      ),
+      darkTheme: ThemeData.dark(), // Optional: Default Flutter dark theme
+      home: const AuthPage(),
       routes: {
         '/addItem': (context) => const AddItemScreen(),
       },

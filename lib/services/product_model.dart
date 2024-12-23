@@ -98,39 +98,28 @@ class CartItem {
 class Order {
   final String id;
   final String userId;
-  final List<CartItem> items;
-  final double totalAmount;
+  final double total;
   final DateTime timestamp;
+  final List<CartItem> items;
 
   Order({
     required this.id,
     required this.userId,
-    required this.items,
-    required this.totalAmount,
+    required this.total,
     required this.timestamp,
+    required this.items,
   });
 
-  // Convert Order to Firestore map
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'userId': userId,
-      'items': items.map((item) => item.toMap()).toList(),
-      'totalAmount': totalAmount,
-      'timestamp': Timestamp.fromDate(timestamp),
-    };
-  }
-
-  // Factory to create an Order from Firestore map
   factory Order.fromMap(String id, Map<String, dynamic> map) {
     return Order(
       id: id,
-      userId: map['userId'],
-      items: (map['items'] as List<dynamic>)
-          .map((item) => CartItem.fromMap('', item))
-          .toList(),
-      totalAmount: map['totalAmount'],
+      userId: map['userId'] as String,
+      total:
+          (map['total'] as num).toDouble(), // Ensure total is parsed correctly
       timestamp: (map['timestamp'] as Timestamp).toDate(),
+      items: (map['items'] as List<dynamic>)
+          .map((item) => CartItem.fromMap('', item as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

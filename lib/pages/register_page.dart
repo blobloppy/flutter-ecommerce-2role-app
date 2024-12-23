@@ -1,7 +1,6 @@
-// ignore_for_file: unused_import
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:heavy_rental_app/components/my_button.dart';
 import 'package:heavy_rental_app/components/my_textfield.dart';
@@ -18,16 +17,16 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
   TextEditingController confirmController = TextEditingController();
 
-  //login method
+  // Role selection
+  String selectedRole = 'user'; // Default role
+
+  // Register method
   void registerUser() async {
-    //show loading circle
+    // Show loading circle
     showDialog(
       context: context,
       builder: (context) => const Center(
@@ -35,26 +34,43 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
-    //make sure password mtch
+    // Make sure passwords match
     if (passwordController.text != confirmController.text) {
       Navigator.pop(context);
-
-      displayMessageToUser("Password Don't Match", context);
-    } else {
-      try {
-        UserCredential? userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
-
-        Navigator.pop(context);
-      } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
-
-        displayMessageToUser(e.code, context);
-      }
+      displayMessageToUser("Passwords don't match", context);
+      return;
     }
 
-    //try creating the user
+    try {
+      // Create user in Firebase Auth
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      // Save user info in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'username': usernameController.text,
+        'email': emailController.text,
+        'role': selectedRole, // Save the selected role
+      });
+
+      // Dismiss loading circle
+      Navigator.pop(context);
+
+      // Notify success
+      displayMessageToUser("User registered successfully!", context);
+    } on FirebaseAuthException catch (e) {
+      // Dismiss loading circle
+      Navigator.pop(context);
+
+      // Show error message
+      displayMessageToUser(e.code, context);
+    }
   }
 
   @override
@@ -63,120 +79,113 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //login
-              Icon(
-                Icons.inventory,
-                size: 80,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Icon
+                Icon(
+                  Icons.inventory,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
 
-              const SizedBox(
-                height: 25,
-              ),
+                const SizedBox(height: 25),
 
-              //app name
-              const Text(
-                "I N V E N T O R Y",
-                style: TextStyle(fontSize: 20),
-              ),
+                // App name
+                const Text(
+                  "I N V E N T O R Y",
+                  style: TextStyle(fontSize: 20),
+                ),
 
-              const SizedBox(
-                height: 50,
-              ),
+                const SizedBox(height: 50),
 
-              //username textfield
-              MyTextfield(
-                hintText: "Username",
-                obscureText: false,
-                controller: usernameController,
-              ),
+                // Username textfield
+                MyTextfield(
+                  hintText: "Username",
+                  obscureText: false,
+                  controller: usernameController,
+                ),
 
-              const SizedBox(
-                height: 10,
-              ),
+                const SizedBox(height: 10),
 
-              //email textfield
-              MyTextfield(
-                hintText: "Email",
-                obscureText: false,
-                controller: emailController,
-              ),
+                // Email textfield
+                MyTextfield(
+                  hintText: "Email",
+                  obscureText: false,
+                  controller: emailController,
+                ),
 
-              const SizedBox(
-                height: 10,
-              ),
+                const SizedBox(height: 10),
 
-              //password textfield
-              MyTextfield(
-                hintText: "Password",
-                obscureText: true,
-                controller: passwordController,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+                // Password textfield
+                MyTextfield(
+                  hintText: "Password",
+                  obscureText: true,
+                  controller: passwordController,
+                ),
 
-              //confirm password textfield
-              MyTextfield(
-                hintText: "Confirm Password",
-                obscureText: true,
-                controller: confirmController,
-              ),
+                const SizedBox(height: 10),
 
-              const SizedBox(
-                height: 10,
-              ),
+                // Confirm password textfield
+                MyTextfield(
+                  hintText: "Confirm Password",
+                  obscureText: true,
+                  controller: confirmController,
+                ),
 
-              //forgot password
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                const SizedBox(height: 10),
+
+                // Role selection dropdown
+                DropdownButtonFormField<String>(
+                  value: selectedRole,
+                  items: const [
+                    DropdownMenuItem(value: 'user', child: Text('User')),
+                    DropdownMenuItem(value: 'admin', child: Text('Admin')),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedRole = value!;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Select Role',
+                    border: OutlineInputBorder(),
                   ),
-                ],
-              ),
+                ),
 
-              const SizedBox(
-                height: 10,
-              ),
+                const SizedBox(height: 20),
 
-              //sign in button
-              MyButton(
-                text: "Register",
-                onTap: registerUser,
-              ),
+                // Register button
+                MyButton(
+                  text: "Register",
+                  onTap: registerUser,
+                ),
 
-              const SizedBox(
-                height: 25,
-              ),
+                const SizedBox(height: 25),
 
-              //dont have an account? Register
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Already have an account? ",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: const Text(
-                      "Login Here",
+                // Already have an account? Login
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account? ",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                          color: Theme.of(context).colorScheme.inversePrimary),
                     ),
-                  )
-                ],
-              )
-            ],
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        "Login Here",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,6 @@
-# heavy_rental_app
+# flutter e-commerce 2 role app
 
-A new Flutter project.
+A Flutter porject for the final exam of 5th semester
 
 ## Getting Started
 

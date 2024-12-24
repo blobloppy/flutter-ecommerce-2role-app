@@ -17,6 +17,7 @@ class FirestoreService {
       'quantity': item.quantity,
       'price': item.price,
       'imageUrl': item.imageUrl,
+      'totalSold': item.totalSold, // Initialize totalSold
     });
 
     // Log activity
@@ -71,6 +72,34 @@ class FirestoreService {
       return snapshot.docs.map((doc) {
         return ActivityLog.fromMap(doc.data() as Map<String, dynamic>);
       }).toList();
+    });
+  }
+
+  // Record Product Sale (Update totalSold and quantity)
+  Future<void> recordProductSale(String productId, int soldQuantity) async {
+    final productRef = _inventoryCollection.doc(productId);
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final snapshot = await transaction.get(productRef);
+
+      if (!snapshot.exists) {
+        throw Exception("Product does not exist!");
+      }
+
+      final currentTotalSold = snapshot['totalSold'] ?? 0;
+      final newTotalSold = currentTotalSold + soldQuantity;
+
+      final currentQuantity = snapshot['quantity'] ?? 0;
+      final newQuantity = currentQuantity - soldQuantity;
+
+      if (newQuantity < 0) {
+        throw Exception("Insufficient stock for product: ${snapshot['name']}");
+      }
+
+      transaction.update(productRef, {
+        'totalSold': newTotalSold,
+        'quantity': newQuantity,
+      });
     });
   }
 }

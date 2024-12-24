@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:heavy_rental_app/services/firestore_services.dart';
 import 'package:heavy_rental_app/services/product_model.dart';
 
 class CartScreen extends StatelessWidget {
@@ -37,6 +38,12 @@ class CartScreen extends StatelessWidget {
         'items': cartItems.map((item) => item.toMap()).toList(),
       });
 
+      // Update inventory and record sales
+      final firestoreService = FirestoreService();
+      for (var item in cartItems) {
+        await firestoreService.recordProductSale(item.id, item.quantity);
+      }
+
       // Clear the user's cart
       for (var item in cartSnapshot.docs) {
         await item.reference.delete();
@@ -64,7 +71,7 @@ class CartScreen extends StatelessWidget {
         .doc(userId)
         .collection('cart');
 
-    return Scaffold(
+    return Scaffold(  
       appBar: AppBar(
         title: const Text("Your Cart"),
       ),

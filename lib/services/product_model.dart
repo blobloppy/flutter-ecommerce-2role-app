@@ -6,22 +6,26 @@ class InventoryItem {
   final String imageUrl;
   final int quantity;
   final double price;
+  final int totalSold; // Add totalSold field
 
-  InventoryItem(
-      {required this.id,
-      required this.name,
-      required this.imageUrl,
-      required this.quantity,
-      required this.price});
+  InventoryItem({
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.quantity,
+    required this.price,
+    this.totalSold = 0, // Default value is 0
+  });
 
   // Convert item to Firestore map
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
+      'imageUrl': imageUrl,
       'quantity': quantity,
       'price': price,
-      'id': id,
-      'imageUrl': imageUrl
+      'totalSold': totalSold, // Include totalSold
     };
   }
 
@@ -32,7 +36,8 @@ class InventoryItem {
       name: map['name'],
       imageUrl: map['imageUrl'],
       quantity: map['quantity'],
-      price: map['price'],
+      price: (map['price'] as num).toDouble(),
+      totalSold: map['totalSold'] ?? 0, // Parse totalSold or default to 0
     );
   }
 }

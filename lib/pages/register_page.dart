@@ -43,8 +43,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       // Create user in Firebase Auth
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -85,16 +85,16 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 // Icon
                 Icon(
-                  Icons.inventory,
+                  Icons.electrical_services,
                   size: 80,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
 
                 const SizedBox(height: 25),
 
                 // App name
                 const Text(
-                  "I N V E N T O R Y",
+                  "E L E C T R O N I C",
                   style: TextStyle(fontSize: 20),
                 ),
 

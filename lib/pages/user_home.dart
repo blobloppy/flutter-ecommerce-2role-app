@@ -162,11 +162,13 @@ class _UserHomeState extends State<UserHome> {
                                   )
                                 : const Icon(Icons.image, size: 100),
                             const SizedBox(height: 8),
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                            Center(
+                              child: Text(
+                                item.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 4),

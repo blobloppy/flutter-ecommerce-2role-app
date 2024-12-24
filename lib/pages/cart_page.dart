@@ -26,12 +26,10 @@ class CartScreen extends StatelessWidget {
           cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 
       // Create a new order
-      final orderId = FirebaseFirestore.instance
-          .collection('orders')
-          .doc()
-          .id; // Generate a unique ID for the order
+      final orderRef = FirebaseFirestore.instance.collection('orders').doc();
+      final orderId = orderRef.id; // Generate a unique ID for the order
 
-      await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
+      await orderRef.set({
         'id': orderId, // Ensure 'id' is saved
         'userId': userId,
         'timestamp': FieldValue.serverTimestamp(),

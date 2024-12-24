@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heavy_rental_app/pages/activity_log.dart';
+import 'package:heavy_rental_app/pages/dashboard.dart';
 import 'package:heavy_rental_app/pages/edit_products.dart';
 import 'package:heavy_rental_app/services/firestore_services.dart';
 import 'package:heavy_rental_app/services/product_model.dart';
@@ -153,6 +154,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(
                   builder: (context) => const ActivityLogScreen(),
                 ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.dashboard),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AdminDashboardPage()),
               );
             },
           ),

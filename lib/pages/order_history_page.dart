@@ -42,10 +42,60 @@ class OrderHistoryPage extends StatelessWidget {
             itemCount: orders.length,
             itemBuilder: (context, index) {
               final order = orders[index];
-              return ListTile(
-                title: Text("Order #${order['orderId']}"),
-                subtitle: Text("Total: \$${order['total']}"),
-                trailing: Text(order['timestamp'].toDate().toString()),
+              final List<dynamic> items =
+                  order['items'] ?? []; // List of items in the order
+
+              return Card(
+                color: Colors.white,
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Order #${order['id']}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      Text(
+                        "Total: \$${order['total']}",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Items:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: items.length,
+                        itemBuilder: (context, itemIndex) {
+                          final item = items[itemIndex];
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Image.network(
+                              item['imageUrl'],
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                            title: Text(item['name']),
+                            subtitle: Text(
+                                "Qty: ${item['quantity']} | \$${item['price']}"),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Date: ${order['timestamp'].toDate()}",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           );
